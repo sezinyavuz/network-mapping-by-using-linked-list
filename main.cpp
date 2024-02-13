@@ -205,6 +205,10 @@ struct node* add_flat_begin(node* last, string name, int index, int initial_band
     return last;
     }
 
+
+
+
+
 //adding a flat to apartment node
 struct node* add_flat(node* last, string name, int index, int initial_bandwith, string flat_id){
 
@@ -216,14 +220,17 @@ struct node* add_flat(node* last, string name, int index, int initial_bandwith, 
     flat->flat_id= flat_id;
 
 
+
+
     do {
 
         if(p->name==name){
+
             for(int i = 0; i< index-2 ;i++){
                 fhead = fhead->next;
             }
             if (flat != 0 and fhead != 0) {
-                //flat->next = fhead->next;
+                flat->next = fhead->next;
                 fhead->next = flat;
                 flat->next=0;
             }
@@ -263,10 +270,6 @@ int find_sum_of_max_bandwidth(struct node* last){
 
 }
 
-
-
-
-
 //printing apartments and flats
 void printList(node* last, ofstream& filename)
 {
@@ -279,11 +282,13 @@ void printList(node* last, ofstream& filename)
 
         do {
             filename << p->name << "("<< p->max_bandwith<<")"<<"    ";
-            fhead = last->fnext;
+            fhead = p->fnext;
             if(fhead != 0){
 
-                filename<< fhead;
+                filename<<"Flat"<<fhead->flat_id<<"("<<fhead->initial_bandwith<<")";
+
                 while(fhead->next != 0){
+
                     filename<<fhead->next;
                     fhead = fhead->next;
 
@@ -303,11 +308,17 @@ void printList(node* last, ofstream& filename)
 
 
 
+
+
+
+
+
+
+
 int main(int argc, char *argv[]) {
 
 
     struct node *last=0;
-    int sum_of_bandwith=0;
     fstream myfile;
     myfile.open(argv[1], ios::in);//open an input file
     ofstream outputFile(argv[2]);//open ana output file
@@ -315,7 +326,7 @@ int main(int argc, char *argv[]) {
     if(!myfile){
         cout<< "no such file!";
     }
-    else {
+    else {                                                    //inserting the input data to 2d matrix
         string line, temp;
         while (getline(myfile, line)) {
 
